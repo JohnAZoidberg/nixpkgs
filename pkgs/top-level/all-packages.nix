@@ -3171,6 +3171,8 @@ with pkgs;
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
+  nodebb = callPackage ../servers/web-apps/nodebb { };
+
   nodejs = hiPrio nodejs-6_x;
 
   nodejs-slim = nodejs-slim-6_x;
