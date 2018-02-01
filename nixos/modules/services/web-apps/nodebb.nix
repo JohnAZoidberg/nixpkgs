@@ -5,115 +5,78 @@ with lib;
 let
   cfg = config.services.nodebb;
 
+  mongoconf = {
+    url = "http://localhost:4567";
+    secret = "kljxdff98y23lknsefk8";
+    database = "mongo";
+    port = 4567;
+    mongo = {
+      host = "127.0.0.1";
+      port = 27017;
+      database= "nodebb";
+    };
+    type = "literal";
+  };
+
+  basePath = "/home/nodebb/files";
+
 in {
   ###### interface
 
   options = {
     services.nodebb = {
       enable = mkEnableOption "nodebb";
-
-      host = mkOption {
-        type = types.str;
-        example = "nodebb.example.com";
-        description = ''
-          Hostname under which this nodebb instance can be reached.
-        '';
-      };
-
-      openFirewall = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to automatically open the specified ports in the firewall.
-        '';
-      };
-
-      listenAddress = mkOption {
-        type = types.str;
-        default = "localhost";
-        description = ''
-          Address or hostname nodebb should listen on.
-        '';
-      };
-
-      listenPort = mkOption {
-        type = types.int;
-        default = 3000;
-        description = ''
-          Port nodebb should listen on.
-        '';
-      };
-
-      user = mkOption {
-        type = types.str;
-        default = "nodebb";
-        description = ''
-          User to run nodebb.
-        '';
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "nodebb";
-        description = ''
-          Group to run nodebb.
-        '';
-      };
     };
   };
 
   config = mkIf cfg.enable {
-    #environment.systemPackages = [ nodebb ];
+    services.mongodb.enable = true;
 
     users.extraUsers = [{
-      name = cfg.user;
-      group = cfg.group;
+      name = "nodebb";
+      group = "nodebb";
+      home = "/home/nodebb";
+      #shell = "${pkgs.bash}/bin/bash";
+      #uid = config.ids.uids.gitlab;
     }];
 
     users.extraGroups = [{
-      name = cfg.group;
+      name = "nodebb";
+      #gid = config.ids.gids.gitlab;
     }];
 
     systemd.services.nodebb = {
+      #enable = true;
       description = "Service which runs NodeBB";
-      after = [ "network.target" ];
+      after = [ "system.slice" "multi-user.target" "mongod.service" ];
       wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [ nodejs ];
+      preStart = ''
+        mkdir -p ${basePath}
+
+        cp -r ${pkgs.nodebb} ${basePath}
+
+        pushd ${basePath}
+
+        npm install
+
+        ./nodebb setup --config ${pkgs.writeText "fuck_this_shit" (builtins.toJSON mongoconf)}
+      '';
 
       serviceConfig = {
-        #PermissionsStartOnly = true;
-        #PrivateTmp = true;
-        #PrivateDevices = true;
+        PermissionsStartOnly = true; # preStart must be run as root
+        Description = "NodeBB";
+
         #Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
-        #TimeoutSec = "300s";
-        #Restart = "on-failure";
-        #RestartSec = "10s";
-        #WorkingDirectory = "${package}/share/frab";
-        ExecStart = "${pkgs.nodebb}/start";
+        User = "nodebb";
+        Group = "nodebb";
+
+        WorkingDirectory = basePath;
+        ExecStart = "${pkgs.nodejs}/bin/node loader.js --no-silent --no-daemon";
+        #Restart = "always";
       };
     };
 
-    networking.firewall.allowedTCPPorts = if cfg.openFirewall then singleton cfg.virtualHost.listenPort else [];
-
-    services.nginx = {
-      enable = cfg.virtualHost.enable;
-      disableSymlinks = "off";
-
-      virtualHosts.nodebb = {
-        listen = [ {
-          serverName = cfg.listenHost;
-          port = cfg.listenPort;
-        } ];
-        default = true;
-        locations = {
-          "/" = {
-            autoIndex = true;
-          };
-        };
-        #serverName = cfg.virtualHost.serverName;
-        root = "/srv/aptly"; #"${cfg.dataDir}/public";
-      };
-    };
+    #networking.firewall.allowedTCPPorts = if cfg.openFirewall then singleton cfg.listenPort else [];
   };
 }

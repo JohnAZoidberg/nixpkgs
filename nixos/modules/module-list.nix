@@ -617,8 +617,9 @@
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
-  ./services/web-apps/nixbot.nix
   ./services/web-apps/nexus.nix
+  ./services/web-apps/nixbot.nix
+  ./services/web-apps/nodebb.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/piwik.nix
   ./services/web-apps/pump.io.nix

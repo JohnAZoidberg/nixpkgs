@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x7f1yz5vnsy9n50ak0vjrm4w8fqc1qvhv8fmqnsc8cgbp7f3p8w";
   };
 
-  buildInputs = [ nodejs ];
+  #buildInputs = [ nodejs ];
 
   installPhase = ''
     mkdir $out
