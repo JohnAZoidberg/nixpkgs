@@ -49,14 +49,18 @@ stdenv.mkDerivation {
   '';
 
   preConfigure = "patchShebangs .";
-  configureFlags =
-    lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
-  ++ [
+  configureFlags = [
     "--disable-dependency-tracking"
     "--enable-fast-install"
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
-  ] ++ lib.optional guileBindings
-    [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
+  ] ++ lib.optionals stdenv.isLinux [
+    "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
+  ] ++ lib.optionals guileBindings [
+    "--enable-guile"
+    "--with-guile-site-dir=$(out)/share/guile/site"
+    "--with-guile-site-ccache-dir=$(out)/lib/guile/site-ccache"
+    "--with-guile-extension-dir=$(out)/lib/guile/extensions"
+  ];
 
   enableParallelBuilding = true;
 
