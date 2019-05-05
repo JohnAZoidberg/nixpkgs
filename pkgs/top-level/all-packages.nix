@@ -9041,6 +9041,10 @@ in
 
   guile-sqlite3 = callPackage ../development/guile-modules/guile-sqlite3 { };
 
+  guile-ssh = callPackage ../development/guile-modules/guile-ssh {
+    libssh = libssh;
+  };
+
   guile-xcb = callPackage ../development/guile-modules/guile-xcb {
     guile = guile_2_0;
   };
