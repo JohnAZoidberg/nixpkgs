@@ -9035,6 +9035,8 @@ in
 
   guile-gcrypt = callPackage ../development/guile-modules/guile-gcrypt { };
 
+  guile-git = callPackage ../development/guile-modules/guile-git { };
+
   guile-ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
   guile-opengl = callPackage ../development/guile-modules/guile-opengl { };
