@@ -9015,6 +9015,8 @@ in
 
   gImageReader = callPackage ../applications/misc/gImageReader { };
 
+  guile-bytestructures = callPackage ../development/guile-modules/guile-bytestructures { };
+
   guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
