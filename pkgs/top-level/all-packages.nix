@@ -15188,7 +15188,8 @@ in
   fusePackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/fuse {
     utillinux = utillinuxMinimal;
   });
-  fuse = lowPrio fusePackages.fuse_2;
+  fuse = lowPrio fuse2;
+  fuse2 = fusePackages.fuse_2;
   fuse3 = fusePackages.fuse_3;
   fuse-common = hiPrio fusePackages.fuse_3.common;
 
