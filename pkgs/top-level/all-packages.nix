@@ -6723,6 +6723,8 @@ in
 
   xfstests = callPackage ../tools/misc/xfstests { };
 
+  xmlfs = callPackage ../tools/filesystems/xmlfs { };
+
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
 
   xscast = callPackage ../applications/video/xscast { };
