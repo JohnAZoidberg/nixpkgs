@@ -1,0 +1,61 @@
+diff --git i/Makefile w/Makefile
+index 96c7d10..bfaa395 100644
+--- i/Makefile
++++ w/Makefile
+@@ -1,7 +1,9 @@
+ # Tested only on Ubuntu Linux.
+ # For Windows builds use make_exe.bat
+
+-SHELL=/bin/bash
++.PHONY: all clean
++
++SHELL?=/bin/sh
+
+ swipl = swipl
+ version = 6.7
+@@ -12,7 +14,7 @@ text3 = "1 / 2 ^ 3 ^ 4 = 1/8."
+ text4 = "If John likes Mary then 1 / 2 ^ 3 = 1/8."
+ text5 = "1 / 2 * 3 - 4 = 1/8."
+
+-all: help
++all: build
+
+ help:
+ 	@echo Targets:
+@@ -21,7 +23,7 @@ help:
+ 	@echo "install: (same as build)"
+ 	@echo "    doc: generates documentation"
+ 	@echo "  clean: deletes automatically generatable files"
+-	@echo "   test: runs some tests"
++	@echo "  check: runs some tests"
+ 	@echo
+
+
+@@ -30,8 +32,6 @@ build:
+
+ install: build
+
+-check:
+-
+ clean:
+ 	rm -f *.exe *.toc prolog/parser/*.{plp,html,toc}
+
+@@ -39,7 +39,7 @@ doc:
+ 	cat prolog/parser/{grammar,grammar_functionwords,grammar_contentwords}.fit | perl prolog/parser/make_syntax_report.perl
+ 	cat prolog/parser/{grammar,grammar_functionwords,grammar_contentwords}.fit | perl prolog/parser/make_syntax_report.perl --number $(version) > syntax_report.html
+
+-test:
++check:
+ 	./ape.exe -text $(text1) -cdrspp -cparaphrase -cowlfsspp -csyntax -csyntaxpp -csyntaxd -csyntaxdpp
+ 	./ape.exe -text $(text2) -cdrspp -cparaphrase -cowlfsspp
+ 	./ape.exe -text $(text3) -cdrspp -cparaphrase
+diff --git i/tests/test_everything.sh w/tests/test_everything.sh
+index 500fdb3..073de4e 100755
+--- i/tests/test_everything.sh
++++ w/tests/test_everything.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+
+ # Runs all the APE tests in one go.
+ #
