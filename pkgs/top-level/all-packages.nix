@@ -16642,6 +16642,8 @@ in
 
   librealsense = callPackage ../development/libraries/librealsense { };
 
+  libredfish = callPackage ../development/libraries/libredfish { };
+
   libsass = callPackage ../development/libraries/libsass { };
 
   libsepol = callPackage ../os-specific/linux/libsepol { };
