@@ -140,6 +140,7 @@ let
         isDarwin isLinux isSunOS isCygwin isFreeBSD isOpenBSD
         isi686 isx86_32 isx86_64
         is32bit is64bit
+        isRiscV isRiscV32 isRiscV64
         isAarch32 isAarch64 isMips isBigEndian;
 
       # Override `system` so that packages can get the system of the host
