@@ -164,6 +164,7 @@ stdenv.mkDerivation {
       done
     '';
 
+  # Linkeremulation LDEMULATION
   emulation = let
     fmt =
       /**/ if targetPlatform.isDarwin  then "mach-o"
@@ -191,6 +192,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isVc4 then "vc4"
       else if targetPlatform.isOr1k then "or1k"
       else if targetPlatform.isRiscV then "lriscv"
+      # else if targetPlatform.isRiscV then "riscv"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""
        else targetPlatform.bfdEmulation or (fmt + sep + arch);
