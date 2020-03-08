@@ -22,6 +22,7 @@ let
     i686-linux.target = "i386";
     x86_64-linux.target = "x86_64";
     aarch64-linux.target = "aarch64";
+    riscv64-linux.target = "riscv64";
   };
 
   # For aarch64, we need to use '--target=aarch64-efi' when building,
@@ -30,6 +31,7 @@ let
     i686-linux.target = "i386";
     x86_64-linux.target = "x86_64";
     aarch64-linux.target = "arm64";
+    riscv64-linux.target = "riscv64";
   };
 
   canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
