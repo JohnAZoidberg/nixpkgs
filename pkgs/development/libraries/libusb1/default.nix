@@ -2,7 +2,8 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+# udev isn't needed for building grub.
+, enableUdev ? false #stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , udev
 , libobjc
 , IOKit
@@ -34,6 +35,8 @@ stdenv.mkDerivation rec {
   preFixup = lib.optionalString enableUdev ''
     sed 's,-ludev,-L${lib.getLib udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
+
+  NIX_LDFLAGS = lib.optionalString enableSystemd "-lgcc_s";
 
   meta = with lib; {
     homepage = "https://libusb.info/";

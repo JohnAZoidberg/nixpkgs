@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
     (lib.withFeature (ncurses != null) "ncursesw")
-    (lib.withFeature (systemd != null) "systemd")
-    (lib.withFeatureAs (systemd != null)
-       "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+    #(lib.withFeature (systemd != null) "systemd")
+    #(lib.withFeatureAs (systemd != null)
+    #   "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
   ;
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ zlib pam ]
-    ++ lib.filter (p: p != null) [ ncurses systemd perl ];
+    ++ lib.filter (p: p != null) [ ncurses perl ];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 

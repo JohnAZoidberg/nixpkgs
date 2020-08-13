@@ -108,6 +108,14 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-grub-mount" # dep of os-prober
     "BUILD_CC=${pkgsBuildBuild.stdenv.cc}/bin/cc"
+    #"CFLAGS=-Wno-error"
+
+    #"--host=riscv64-unknown-linux-gnu"
+    #"TARGET_CC=riscv64-unknown-linux-gnu-gcc"
+    #"TARGET_OBJCOPY=riscv64-unknown-linux-gnu-objcopy"
+    #"TARGET_STRIP=riscv64-unknown-linux-gnu-strip"
+    #"TARGET_NM=riscv64-unknown-linux-gnu-nm"
+    #"TARGET_RANLIB=riscv64-unknown-linux-gnu-ranlib"
   ]
     ++ optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]

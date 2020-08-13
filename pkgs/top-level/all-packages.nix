@@ -4923,6 +4923,12 @@ in
     efiSupport = true;
   };
 
+  grub2_efi_light = grub2.override {
+    efiSupport = true;
+    zfsSupport = false;
+    lvm2 = null;
+  };
+
   grub2_light = grub2.override {
     zfsSupport = false;
   };
