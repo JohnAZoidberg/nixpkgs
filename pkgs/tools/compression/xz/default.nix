@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional enableStatic "--disable-shared";
 
+  # Required for RISC-V
+  NIX_CFLAGS_LINK = "-lpthread";
+
   doCheck = true;
 
   preCheck = ''

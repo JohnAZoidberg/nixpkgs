@@ -13021,10 +13021,12 @@ in
 
   jhiccup = callPackage ../development/tools/java/jhiccup { };
 
-  valgrind = callPackage ../development/tools/analysis/valgrind {
-    inherit (buildPackages.darwin) xnu bootstrap_cmds cctools;
-  };
-  valgrind-light = res.valgrind.override { gdb = null; };
+  valgrind = null;
+  valgrind-light = null;
+  #valgrind = callPackage ../development/tools/analysis/valgrind {
+  #  inherit (buildPackages.darwin) xnu bootstrap_cmds cctools;
+  #};
+  #valgrind-light = res.valgrind.override { gdb = null; };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
@@ -14830,7 +14832,7 @@ in
 
   libdnf = callPackage ../tools/package-management/libdnf { };
 
-  libdrm = callPackage ../development/libraries/libdrm { };
+  libdrm = callPackage ../development/libraries/libdrm { withValgrind = false; };
 
   libdv = callPackage ../development/libraries/libdv { };
 

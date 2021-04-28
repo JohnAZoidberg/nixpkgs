@@ -8,6 +8,7 @@ set -euo pipefail
 # https://static.rust-lang.org/dist/channel-rust-beta-date.txt
 
 PLATFORMS=(
+  riscv64gc-unknown-linux-gnu
   i686-unknown-linux-gnu
   x86_64-unknown-linux-gnu
   x86_64-unknown-linux-musl

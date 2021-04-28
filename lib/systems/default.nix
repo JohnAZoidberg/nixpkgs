@@ -100,6 +100,7 @@ rec {
         if final.isAarch32 then "arm"
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
+        #else if final.isRiscV64 then "riscv64"
         else {
           powerpc = "ppc";
           powerpcle = "ppc";

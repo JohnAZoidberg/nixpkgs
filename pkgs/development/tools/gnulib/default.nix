@@ -26,6 +26,10 @@ stdenv.mkDerivation {
   # do not change headers to not update all vendored build files
   dontFixup = true;
 
+  preBuilds = ''
+    rm modules/getaddrinfo-tests
+  '';
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/gnulib/";
     description = "Central location for code to be shared among GNU packages";

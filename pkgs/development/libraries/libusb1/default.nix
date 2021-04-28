@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     sed 's,-ludev,-L${lib.getLib udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
-  NIX_LDFLAGS = lib.optionalString enableSystemd "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString enableUdev "-lgcc_s";
 
   meta = with lib; {
     homepage = "https://libusb.info/";

@@ -132,11 +132,11 @@ in
       inherit nativePrefix;
       bintools = import ../../build-support/bintools-wrapper {
         name = "bintools";
-        inherit stdenvNoCC nativePrefix;
+        inherit stdenvNoCC nativePrefix lib;
         nativeTools = true;
         nativeLibc = true;
       };
-      inherit stdenvNoCC;
+      inherit stdenvNoCC lib;
     };
 
     fetchurl = import ../../build-support/fetchurl {

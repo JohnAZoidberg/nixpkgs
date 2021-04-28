@@ -16,7 +16,7 @@
       armv7l-linux = import ./bootstrap-files/armv7l.nix;
       aarch64-linux = import ./bootstrap-files/aarch64.nix;
       mipsel-linux = import ./bootstrap-files/loongson2f.nix;
-      riscv64 = import ./bootstrap-files/riscv64.nix;
+      riscv64-linux = import ./bootstrap-files/riscv64.nix;
     };
     musl = {
       aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
@@ -251,6 +251,12 @@ in
         libc = getLibc self;
       };
     };
+
+    # For at least bash and libtool, whoops probably don't need patchelf here
+    extraNativeBuildInputs = [ prevStage.patchelf ] ++
+      # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
+      lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
+                   prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 

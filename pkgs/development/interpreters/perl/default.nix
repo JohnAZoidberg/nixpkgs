@@ -19,15 +19,15 @@ let
   common = { perl, buildPerl, version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
 
-    name = "perl-${version}";
+    pname = "perl";
 
     src = fetchurl {
-      url = "mirror://cpan/src/5.0/${name}.tar.gz";
+      url = "mirror://cpan/src/5.0/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 
     # TODO: Add a "dev" output containing the header files.
-    outputs = [ "out" "man" "devdoc" ] ++
+    outputs = [ "out" ] ++ #"man" "devdoc" ] ++
       optional crossCompiling "mini";
     setOutputFlags = false;
 
@@ -79,9 +79,9 @@ let
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads"
       ++ optionals (!crossCompiling) [
-        "-Dprefix=${placeholder "out"}"
-        "-Dman1dir=${placeholder "out"}/share/man/man1"
-        "-Dman3dir=${placeholder "out"}/share/man/man3"
+        "-Dprefix=$out"
+        "-Dman1dir=$out/share/man/man1"
+        "-Dman3dir=$out/share/man/man3"
       ];
 
     configureScript = optionalString (!crossCompiling) "${stdenv.shell} ./Configure";

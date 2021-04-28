@@ -3,7 +3,7 @@
 let
   rev = "e78c96e5288993aaea3ec44e5c6ee755c668da79";
 
-  # Don't use fetchgit as this is needed during Aarch64 bootstrapping
+  # Don't use fetchgit as this is needed during Aarch64 and RiscV64 bootstrapping
   configGuess = fetchurl {
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.guess?id=${rev}";
     sha256 = "sha256-TSLpYIDGSp1flqCBi2Sgg9IWDV5bcO+Hn2Menv3R6KU=";
