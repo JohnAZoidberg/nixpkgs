@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "devdoc"
+    "examples"
   ];
 
   src = fetchFromGitLab {
@@ -42,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
       tests/virtual-image.py \
       tests/umockdev-test.py \
       tests/test-generated-hwdb.sh
+
+    # Remove debug logging defaults from examples
+    substituteInPlace examples/*.c \
+      --replace-quiet 'setenv ("G_MESSAGES_DEBUG", "all", 0);' "" \
+      --replace-quiet 'setenv ("LIBUSB_DEBUG", "3", 0);' ""
   '';
 
   nativeBuildInputs = [
@@ -70,6 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddrivers=all"
     "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
+
+  postInstall = ''
+    mkdir -p $examples/bin
+    for prog in enroll identify img-capture manage-prints verify clear-storage; do
+      cp examples/$prog $examples/bin/libfprint-$prog
+    done
+  '';
 
   nativeInstallCheckInputs = [
     (python3.withPackages (p: with p; [ pygobject3 ]))
