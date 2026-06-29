@@ -19,6 +19,12 @@
 let
   version = "26.06";
 
+  vbootSrc = fetchgit {
+    url = "https://review.coreboot.org/vboot";
+    rev = "5c360ef458b0a013d8a6d47724bb0fffb5accbcf";
+    hash = "sha256-BZdyUPa9RD2txjFfgcyEQEG+Z6yPJpXRdwTe1ExwaSs=";
+  };
+
   commonMeta = {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
@@ -37,6 +43,8 @@ let
     {
       pname,
       path ? "util/${pname}",
+      # Only cbfstool (and the tools built from its Makefile) need vboot.
+      needsVboot ? false,
       ...
     }@args:
     stdenv.mkDerivation (
@@ -47,13 +55,18 @@ let
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
-          hash = "sha256-rL9txaDXUzjkC2ioYmunoNq2+9rz9wpEJ7z3GZrqOH4=";
+          fetchSubmodules = false;
+          hash = "sha256-lnO2U/VZC5IhvTF0ZGfoy4K/1YXojeMVIdcBi8rAOFo=";
         };
 
         enableParallelBuilding = true;
 
         postPatch = ''
-          substituteInPlace 3rdparty/vboot/Makefile --replace 'ar qc ' '$$AR qc '
+          ${lib.optionalString needsVboot ''
+            mkdir -p 3rdparty/vboot
+            cp -r --no-preserve=mode,ownership ${vbootSrc}/. 3rdparty/vboot/
+            substituteInPlace 3rdparty/vboot/Makefile --replace-fail 'ar qcT ' '$$AR qcT '
+          ''}
           cd ${path}
           patchShebangs .
         '';
@@ -65,7 +78,10 @@ let
 
         meta = commonMeta // args.meta;
       }
-      // (removeAttrs args [ "meta" ])
+      // (removeAttrs args [
+        "meta"
+        "needsVboot"
+      ])
     );
 
   utils = {
@@ -104,6 +120,7 @@ let
     };
     cbfstool = generic {
       pname = "cbfstool";
+      needsVboot = true;
       meta.description = "Management utility for CBFS formatted ROM images";
     };
     nvramtool = generic {
